@@ -66,4 +66,3 @@ C:/Program Files/Java/jre1.8.0_131/bin/javaw.exe
 ![image1](./images/page6/validation.JPG) 
 
 # Reference
-> - [블로그 참고](https://jojoldu.tistory.com/122?category=635881

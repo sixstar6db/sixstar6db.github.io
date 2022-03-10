@@ -1055,4 +1055,3 @@ function send(trid, sendData = {}, callbackFunc) {
  ```
 
 # Reference
-> - [블로그 참고](https://jojoldu.tistory.com/122?category=635881

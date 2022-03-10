@@ -350,4 +350,3 @@ INSERT INTO Products (prod_name, prod_price) values ('우산', 2900);
   ```
 
 # Reference
-> - [블로그 참고](https://jojoldu.tistory.com/122?category=635881
