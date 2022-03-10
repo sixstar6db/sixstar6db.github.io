@@ -1,14 +1,17 @@
 ---
-layout: post
-title: '[SPRING] 스프링부트 프로젝트 템플릿1(mybatis-jsp-h2)'
-subtitle: '스프링부트 프로젝트 템플릿'
-date: 2022-02-28
-author: Sankook Lee
-tags: [spring]
-comments: true
-sitemap :
-  changefreq : daily
-  priority : 1.0
+title:  "[SPRING] 스프링부트 프로젝트 템플릿1(mybatis-jsp-h2)"
+excerpt: "스프링부트 프로젝트 템플릿"
+
+categories: Java
+tags:
+  - [spring]
+
+toc: true
+toc_sticky: true
+ 
+date: 2022-02-26
+last_modified_at: 2022-02-26
+author_profile: false      
 ---
 
 ## 스프링부트 프로젝트 템플릿 만들어보기

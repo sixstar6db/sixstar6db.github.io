@@ -1,14 +1,17 @@
 ---
-layout: post
-title: '[IDE] 이클립스 최초 설정 몇가지'
-subtitle: '이클립스 설정'
-date: 2022-03-07
-author: Sankook Lee
-tags: [IDE]
-comments: true
-sitemap :
-  changefreq : daily
-  priority : 1.0
+title:  "[IDE] 이클립스 최초 설정 몇가지"
+excerpt: "이클립스 설정"
+
+categories: Java
+tags:
+  - [IDE]
+
+toc: true
+toc_sticky: true
+ 
+date: 2022-02-28
+last_modified_at: 2022-02-28
+author_profile: false     
 ---
 
 ## 이클립스 최초 셋팅
