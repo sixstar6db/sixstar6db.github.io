@@ -1,14 +1,17 @@
 ---
-layout: post
-title: '[SPRING] 스프링 프로젝트 생성하기(mybatis-jsp-oracle)'
-subtitle: '스프링부트 프로젝트 템플릿'
-date: 2022-03-14
-author: Sankook Lee
-tags: [spring]
-comments: true
-sitemap :
-  changefreq : daily
-  priority : 1.0
+title:  "[SPRING] 스프링 프로젝트 생성하기(mybatis-jsp-oracle)"
+excerpt: "스프링 프로젝트 템플릿"
+
+categories: Java
+tags:
+  - [spring]
+
+toc: true
+toc_sticky: true
+ 
+date: 2022-03-01
+last_modified_at: 2022-03-01
+author_profile: false     
 ---
 
 ## java maven project 생성
