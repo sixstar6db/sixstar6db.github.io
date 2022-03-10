@@ -32,11 +32,11 @@ C:/Program Files/Java/jre1.8.0_131/bin/javaw.exe
 
 1. 먼저 다크 모드로 변경
 
-![image1](./images/page6/darkmode.JPG)
+![image1](/images/page6/darkmode.JPG)
 
 2. UTF-8 설정
 
-![image1](./images/page6/utf8-1.JPG)
+![image1](/images/page6/utf8-1.JPG)
 
  - text content-type 도 utf-8 로 변경
 
