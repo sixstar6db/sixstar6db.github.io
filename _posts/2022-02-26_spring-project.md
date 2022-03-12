@@ -20,6 +20,7 @@ author_profile: false
   - spring-boot maven 프로젝트 생성
   - pom.xml 은 아래와 같이 의존성 추가
   - mybatis + jsp + h2 
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -154,8 +155,10 @@ public class Product {
 }
 
 ```
+
  - mybatis의 mapper 인터페이스를 생성한다. 
  - @MapperScan을 사용하지 않으면, @Mapper를 클래스에 선언해주어야 한다. 
+
 ```java
 package com.sk.springboot_mybatis_jsp.repository;
 
@@ -173,8 +176,10 @@ public interface ProductMapper {
 }
 
 ```
+
   - src/main/resources 하위에 mybatis-mapper 디렉토리를 생성 후,(설정) 
   - mapper 인터페이스에 해당하는 xml 을 생성한다. 
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -271,7 +276,9 @@ public class ProductsController {
     }
 }
  ```
+
    - products.jsp 파일을 생성한다. 
+   
  ```html
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
