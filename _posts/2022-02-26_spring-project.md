@@ -103,7 +103,7 @@ author_profile: false
   - src/main/resources 하위에 application.properties 파일을 생성한다. 
   - src/main/ 하위에 webapp 디렉토리를 생성하고, 그 하위에 WEB-INF 디렉토리를 만든다. 
 
-![image1](./images/page5/springboot-mybatis-jsp-project1.JPG)
+![image1](/assets/images/page5/springboot-mybatis-jsp-project1.JPG)
 
   - 어플리케이션 실행을 위한 App.java 를 생성한다. 
   - @MapperScan을 사용하면, 기준 클래스 하위 인터페이스를 모두 mybatis mapper로 등록한다. 
