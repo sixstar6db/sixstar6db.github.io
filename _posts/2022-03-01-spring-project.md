@@ -18,9 +18,9 @@ author_profile: false
 
  -  스프링부트를 사용하지 않고, 스프링프레임워크 + 톰캣 개발 환경 셋팅
 
-![image1](./images/page7/step1.JPG)
-![image1](./images/page7/step2.JPG)
-![image1](./images/page7/step3.JPG)
+![image1](/assets/images/page7/step1.JPG)
+![image1](/assets/images/page7/step2.JPG)
+![image1](/assets/images/page7/step3.JPG)
 
 - pom.xml 에 의존관계 라이브러리 설정
 
@@ -191,7 +191,7 @@ author_profile: false
 
  - jdk 8 로 변경 후에 maven update 를 해준다. 
 
-![image1](./images/page7/step4.JPG)
+![image1](/assets/images/page7/step4.JPG)
 
  - src/webapp/WEB-INF/web.xml 파일을 생성한다. 
 
@@ -320,9 +320,9 @@ author_profile: false
 
  - 웹어플리케이션을 배포할 톰캣 서버를 등록한다. 
 
-![image1](./images/page7/step6.JPG)
-![image1](./images/page7/step7.JPG)
-![image1](./images/page7/step8.JPG)
+![image1](/assets/images/page7/step6.JPG)
+![image1](/assets/images/page7/step7.JPG)
+![image1](/assets/images/page7/step8.JPG)
 
  - context path 경로를 설정한다. Server.xml 에 Context 요소의 path 속성을 '/' 로 변경
 
@@ -721,11 +721,11 @@ public class UserController {
 </configuration>
  ```
 
-![image1](./images/page7/step10.JPG)
+![image1](/assets/images/page7/step10.JPG)
 
  - 톰캣서버의 context.xml 에 DB 커넥션 풀 리소스를 설정한다. 
 
-![image1](./images/page7/step11.JPG)
+![image1](/assets/images/page7/step11.JPG)
 
  - ojdbc6.jar 파일을 클래스 패스에 추가한다. 
 
