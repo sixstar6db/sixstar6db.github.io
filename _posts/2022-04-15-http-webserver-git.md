@@ -1,10 +1,10 @@
 ---
-title:  "[git] http 웹서버 만들기 1 - git 연동"
+title:  "[java] http 웹서버 만들기 1 - git 연동"
 excerpt: "클린코더스"
 
 categories: Java
 tags:
-  - [git]
+  - [java]
 
 toc: true
 toc_sticky: true
