@@ -16,7 +16,7 @@ author_profile: false
 
 ## DAO 예외처리 코드
 
- - JDBC코드에서는 어떤 상황에서도 사용한 리소스를 반환하도록 try/catch/finally 구문 사용을 권장한다. 
+ - 오리지널 db 접속 코드에서는 try/catch 문으로 장황하게 코드가 나열되어 있다. 
 
 ```java
 public void deleteAll() throws SQLException {
@@ -71,10 +71,9 @@ public void deleteAll() throws SQLException {
     }
 ```
 
- - 변하는 부분을 메소드로 독립시켰지만, 이득이 없어 보인다. 보통 메소드 추출 리팩토링을 적용하는 경우, 분리시킨 메소드를 다른 곳에서 재사용할 수 있어야 하는데,,이건 반대로 분리시키고 남은 메서드가 재사용이 필요한 상황이다. 뭔가 반대로 되었다.
+ - 메소드 추출 된 부분은 다른 곳에서 재사용이 가능해야 하는데, 위 소스는 그렇지 못하다.
 
- - 템플릿 메소드 패턴을 적용해보자. 변하지 않는 부분은 슈퍼클래스에 두고, 변하는 부분은 추상 메소드로 정의해서
- 서브클래스에서 오버라이드 하여 새롭게 정의해 쓰도록 한다. 
+ - 템플릿 메소드 패턴을 적용해보자. 변하는 부분을 추상 메소드로 정의하여, 상속을 통해 구현한다. 
 
 ```java
 abstract PreparedStatement makeStatement(Connection c) throws SQLException;
