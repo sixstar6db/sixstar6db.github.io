@@ -1,5 +1,5 @@
 ---
-title:  "[SPRING] 스프링부트 프로젝트 템플릿1(mybatis-jsp-h2)"
+title:  "[spring] 스프링부트 프로젝트 템플릿1(mybatis-jsp-h2)"
 excerpt: "스프링부트 프로젝트 템플릿"
 
 categories: Java

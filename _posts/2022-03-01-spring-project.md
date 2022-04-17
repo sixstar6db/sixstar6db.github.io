@@ -1,5 +1,5 @@
 ---
-title:  "[SPRING] 스프링 프로젝트 생성하기(mybatis-jsp-oracle)"
+title:  "[spring] 스프링 프로젝트 생성하기(mybatis-jsp-oracle)"
 excerpt: "스프링 프로젝트 템플릿"
 
 categories: Java

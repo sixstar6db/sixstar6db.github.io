@@ -1,10 +1,10 @@
 ---
-title:  "[SPRING] 토비 스프링 vol1 2장"
+title:  "[spring] 토비 스프링 vol1 2장"
 excerpt: "토비의 스프링"
 
 categories: Java
 tags:
-  - [SPRING]
+  - [spring]
 
 toc: true
 toc_sticky: true

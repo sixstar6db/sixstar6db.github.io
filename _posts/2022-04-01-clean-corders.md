@@ -1,10 +1,10 @@
 ---
-title:  "[JAVA] 백명석 클린코더스"
+title:  "[java] 백명석 클린코더스"
 excerpt: "클린코더스"
 
 categories: Java
 tags:
-  - [JAVA]
+  - [java]
 
 toc: true
 toc_sticky: true
