@@ -23,6 +23,9 @@ author_profile: false
 
 ![image1](/assets/images/page10/img1.PNG)
 
+위 화면에서 EC2를 클릭한다. 
+
+
 # Reference
 
 > - 
