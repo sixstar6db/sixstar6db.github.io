@@ -1,10 +1,10 @@
 ---
-title:  "[AWS] AWS 시작하기"
+title:  "[기타] AWS 시작하기"
 excerpt: "AWS 시작하기"
 
 categories: Java
 tags:
-  - [AWS]
+  - [other]
 
 toc: true
 toc_sticky: true
