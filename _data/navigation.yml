@@ -2,8 +2,8 @@
 main:
   - title: "Home"
     url: /
-  - title: "Java"
-    url: /java/
+#  - title: "Java"
+#    url: /java/
   - title: "Tag"
     url: /tags/ 
   - title: "search"
