@@ -429,6 +429,49 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
  - `JpaRepository<Posts, Long>` 를 상속하면 자동으로 CRUD 메소드를 만들어준다. 
  - @Repository를 추가할 필요 없다. 대신 Posts 와 PostsRepository 는 패키지상 함께 위치해 있어야 한다. Entity는 기본 Repository 없이는 제대로 역할 할수 없다. 
 
+> 테스트 코드 작성
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class PostsRepositoryTest {
+
+    @Autowired
+    PostsRepository repository;
+
+    @After
+    public void cleanup(){
+        repository.deleteAll();
+    }
+
+    @Test
+    public void save_게시글저장불러오기(){
+        //given
+        String title = "테스트용 제목";
+        String content = "테스트용 본문";
+
+        repository.save(Posts.builder()
+                .title(title).content(content).author("lee").build());
+
+        //when
+        List<Posts> postsList = repository.findAll();
+
+        //then
+        Posts posts = postsList.get(0);
+
+        assertThat(posts.getTitle()).isEqualTo(title);
+        assertThat(posts.getContent()).isEqualTo(content);
+    }
+}
+```
+
+ - @After : 단위 테스트가 끝날때마다 수행
+ - repository.save : id값이 없다면 insert, 있다면 update 를 수행한다. 
+ - 실행되는 쿼리가 보고 싶다면, application.properties 에 `spring.jpa.show_sql=true` 추가한다. 
+ - H2는 Mysql 쿼리를 수행해도 정상 작동 된다고 한다. 출력되는 쿼리 로그를 mysql 버전으로 바꾸고 싶다면, 
+      `spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect`
+ -      
+
 # Reference
 > - 스프링부트와 AWS 혼자 구현하는 웹서비스 ( by 이동욱)
 
