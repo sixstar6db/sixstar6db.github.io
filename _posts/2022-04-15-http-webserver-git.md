@@ -1,6 +1,6 @@
 ---
 title:  "[java] http 웹서버 만들기 1 - git 연동"
-excerpt: "클린코더스"
+excerpt: "http 웹서버 만들기 1 - git 연동"
 
 categories: Java
 tags:
