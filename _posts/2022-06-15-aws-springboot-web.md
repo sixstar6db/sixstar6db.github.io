@@ -470,7 +470,451 @@ public class PostsRepositoryTest {
  - 실행되는 쿼리가 보고 싶다면, application.properties 에 `spring.jpa.show_sql=true` 추가한다. 
  - H2는 Mysql 쿼리를 수행해도 정상 작동 된다고 한다. 출력되는 쿼리 로그를 mysql 버전으로 바꾸고 싶다면, 
       `spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect`
- -      
+
+## 등록/수정/조회 API
+
+> 서비스(Service) Layer 에서 비즈니스 로직 구현?
+
+ - 서비스는 트랜잭션, 도메인간 순서 보장만 한다. 
+ - 비즈니스 로직은 도메인에 구현되어야 한다.
+ - PostsService.java
+
+```java
+@RequiredArgsConstructor
+@Service
+public class PostService {
+
+    private final PostsRepository repository;
+
+    @Transactional
+    public Long save(PostSaveRequestDto requestDto) {
+        return repository.save(requestDto.toEntity()).getId();
+    }
+}
+```
+
+ - PostsController.java
+
+```java
+@RequiredArgsConstructor
+@RestController
+public class PostsController {
+
+    private final PostService postService;
+
+    @PostMapping("/api/v1/posts")
+    public Long save(@RequestBody PostSaveRequestDto requestDto){
+        return postService.save(requestDto);
+    }
+}
+```
+
+ - Entity 클래스를 request/response DTO 로 사용하지 말것. Entity 클래스는 데이터베이스와 맞닿은 핵심 도메인 클래스이기 때문에 변경에 대한 영향이 크다. 
+ - DB Layer 와 View Layer 의 역할 분리를 철저히 하자.
+ - PostSaveRequestDto.java
+
+```java
+@Getter
+@NoArgsConstructor
+public class PostSaveRequestDto {
+
+    private String title;
+    private String content;
+    private String author;
+
+    @Builder
+    public PostSaveRequestDto(String title, String content, String author){
+        this.title = title;
+        this.content = content;
+        this.author = content;
+    }
+    public Posts toEntity() {
+        return Posts.builder()
+                .title(title).content(content).author(author)
+                .build();
+    }
+}
+```
+
+ - PostsController 테스트 해보기
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class PostsControllerTest {
+
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private PostsRepository repository;
+
+    @After
+    public void tearDown(){
+        repository.deleteAll();
+    }
+
+    @Test
+    public void posts_등록된다(){
+        //given
+        String title = "title";
+        String content = "content";
+        PostSaveRequestDto requestDto = PostSaveRequestDto
+                .builder()
+                .title(title)
+                .content(content)
+                .author("lee")
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/posts";
+
+        //when
+        ResponseEntity<Long> response = restTemplate.postForEntity(url, requestDto, Long.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isGreaterThan(0L);
+
+        List<Posts> all = repository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(title);
+        assertThat(all.get(0).getContent()).isEqualTo(content);
+
+    }
+}
+```
+
+ - @WebMvcTest는 JPA 기능이 동작하지 않아, JPA기능까지 테스트 할때는 @SpringBootTest 와 TestRestTemplate 을 사용한다. 
+
+> 수정/조회 기능 만들기
+
+- PostsController.java 메서드 추가
+
+```java
+...
+    @PutMapping("/api/v1/posts/{id}")
+    public Long update(@PathVariable Long id, @RequestBody PostSaveRequestDto requestDto){
+        return postService.update(id, requestDto);
+    }
+
+    @GetMapping("/api/v1/posts/{id}")
+    public PostResponseDto findById(@PathVariable Long id){
+        return postService.findById(id);
+    }
+```
+
+ - PostResponseDto.java
+
+```java
+@Getter
+public class PostResponseDto {
+    private Long id;
+    private String title;
+    private String content;
+    private String author;
+
+    public PostResponseDto(Posts entity){
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.author = entity.getAuthor();
+    }
+}
+```
+
+- PostUpdateRequestDto.java
+
+```java
+@Getter
+@NoArgsConstructor
+public class PostUpdateRequestDto {
+    private String title;
+    private String content;
+
+    @Builder
+    PostUpdateRequestDto(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+}
+```
+
+- Posts.java 에 update 메서드 추가
+
+```java
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+```
+
+- PostsService.java 에  update/findById 추가하기
+
+```java
+...
+    @Transactional
+    public Long update(Long id, PostUpdateRequestDto requestDto) {
+        Posts posts = postsFindById(id);
+        posts.update(requestDto.getTitle(), requestDto.getContent());
+        return id;
+    }
+
+    public PostResponseDto findById(Long id) {
+        Posts posts = postsFindById(id);
+        return new PostResponseDto(posts);
+    }
+
+    private Posts postsFindById(Long id){
+        return repository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다. id:"+id));
+    }
+```
+
+> 더티 체킹
+
+  - Entity 객체의 값을 변경 한 후 , 트랜잭션이 끝나면 update 쿼리를 통해 테이블에 반영된다. 
+
+> Update 테스트 코드 작성하기
+
+```java
+    @Test
+    public void posts_수정된다(){
+        //given
+        Posts savePosts = repository.save(Posts.builder()
+                .title("title")
+                .content("content")
+                .author("author")
+                .build());
+
+        Long updateId = savePosts.getId();
+        String expectedTitle = "title2";
+        String expectedContent = "content2";
+
+        PostUpdateRequestDto requestDto = PostUpdateRequestDto.builder()
+                .title(expectedTitle)
+                .content(expectedContent)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
+
+        HttpEntity<PostUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
+
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+        List<Posts> all = repository.findAll();
+        assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
+        assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
+    }
+```
+
+> H2 콘솔 사용하기 
+
+ - application.properties 에 다음과 같은 설정을 추가한다. `spring.h2.console.enabled=true`
+ - main 메서드를 실행하여 어플리케이션을 구동한다. 
+ - `http://localhost:8080/h2-console` 로 접속한다. 
+ - `jdbc:h2:mem:testdb`로 url 을 입력한다.  
+
+## JAP Auditing으로 생성시간/수정시간 자동화 하기
+
+ - BaseTimeEntity.java : 모든 Entity 의 상위클래스가 되어 Entity 들의 생성/수정시간 을 자동으로 관리
+
+```java
+@Getter
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class BaseTimeEntity {
+    
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
+}
+``` 
+
+- @MappedSuperclass : JPA Entity 들이 BaseTimeEntity 를 상속할 경우 createDate, modifiedDate 를 컬럼으로 인식하도록 한다. 
+- @EntityListeners : BaseTimeEntity 에 Auditing 기능을 포함.
+- JPA Auditing 기능을 활성화 하기 위해 App 클래스에 어노테이션 추가 (@EnableJpaAuditing)
+- Test code => 
+
+```java
+    @Test
+    public void baseTimeEntity_등록(){
+        //given
+        LocalDateTime now = LocalDateTime.of(2022, 6, 16, 0,0,0);
+        repository.save(Posts.builder()
+                .title("title")
+                .content("content")
+                .author("author")
+                .build()
+        );
+        
+        //when
+        List<Posts> all = repository.findAll();
+
+        //then
+        Posts posts = all.get(0);
+
+        assertThat(posts.getCreateDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
+    }
+```
+
+## 타임리프로 화면 구성하기
+
+- build.gradle 에 의존성 추가
+
+```java
+compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+```
+
+- src/main/resouces/templates/index.html 생성
+
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+  <title>마이 페이지</title>
+</head>
+<body>
+<h1>마이 웹 서비스 연습</h1>
+</body>
+</html>
+```
+
+- index controller 생성
+
+```java
+@Controller
+public class IndexController {
+
+    @GetMapping("/")
+    public String index(){
+        return "index";
+    }
+}
+```
+
+ - 메인페이지 테스트 코드
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+public class IndexControllerTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    public void 메인페이지_로딩(){
+        //when
+        String body = this.restTemplate.getForObject("/", String.class);
+        //then
+        Assertions.assertThat(body).contains("마이 웹 서비스 연습");
+    }
+``` 
+
+ - App 클래스 main 실행 후에 http://localhost:8080/ 접속해본다. 
+
+- Posts 등록 화면
+
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title>Posts 등록하기</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<h1>Posts 등록하기</h1>
+<div>
+    <form>
+        <div>
+            <input type="text" id="title" placeholder="제목을 입력하세요">
+            <input type="text" id="content" placeholder="내용을 입력하세요">
+            <input type="text" id="author" placeholder="저자를 입력하세요">
+        </div>
+    </form>
+    <a href="/" role="button">취소</a>
+    <button type="button" id="btn-save">등록</button>
+</div>
+<script src="/js/app/posts/posts-save.js"></script>
+</body>
+</html>
+```
+
+ - 등록 화면 js
+
+```js
+var postsSave = {
+    init : function(){
+        var _this = this;
+        $('#btn-save').on('click', function(){
+            _this.save();
+        });
+    },
+    save : function(){
+
+        var data = {
+            title : $('#title').val(),
+            author : $('#author').val(),
+            content : $('#content').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/v1/posts',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(){
+            alert('글이 등록되었습니다. ');
+            window.location.href='/';
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    }
+}
+
+postsSave.init();
+```
+
+ - var postsSave 란 객체를 만들어 해당 객체에서 필요한 function 을 만든다. 이렇게 하면 postsSave 객체 안에서만 function 이 유효하기 때문에 다른 js 와 겹칠 위험이 사라진다. ES6를 비롯한 최신 자바스크립트 버전이나 앵귤라, 뷰등은 이미 프레임워크 레벨에서 지원한다. 
+
+ - 전체 목록 조회하기
+
+```html
+...
+<tbody>
+    <tr th:each="post : ${posts}">
+        <td ><a th:text="${post.id}"  th:href="@{/posts/update/{param}(param=${post.id})}">id</a></td>
+        <td th:text="${post.title}">title</td>
+        <td th:text="${post.author}">author</td>
+        <td th:text="${post.modifiedDate}">modifiedDate</td>
+    </tr>
+</tbody>
+...
+``` 
+
+- PostService.java 에 전체조회 메서드 추가
+- map(posts -> new PostListResponseDto(posts)) 는 map(PostListResponseDto::new) 와 동일함.
+
+```java
+@Transactional(readOnly = true)
+public List<PostListResponseDto> findAllDesc() {
+    return repository.findAll().stream()
+            .map(PostListResponseDto::new)
+            .collect(Collectors.toList());
+}
+```
+
+ - 수정 및 삭제에 대한 내용은 스킵!
+ - 스크링 시큐리티 부분도 일단 스킵하고, 바로 AWS에 배포하는걸 해보기롤~
 
 # Reference
 > - 스프링부트와 AWS 혼자 구현하는 웹서비스 ( by 이동욱)
