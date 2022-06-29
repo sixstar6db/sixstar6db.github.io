@@ -1,6 +1,6 @@
 ---
-title:  "[기타] AWS 시작하기"
-excerpt: "AWS 시작하기"
+title:  "[기타] AWS에 EC2와 RDS 생성하기"
+excerpt: " AWS에 EC2와 RDS 생성하기"
 
 categories: Java
 tags:
@@ -177,11 +177,11 @@ author_profile: false
 - 직접 수정한다!
 ![image1](/assets/images/page10/img42.png)
 
-- 인텔리제이에서 접속해본다. 
-- 일단 Database 플러그인을 설치 한 후, DB Browser 를 실행한다. 
+- EC2 에 접속하여 DB 접속을 해본다. 
 
-![image1](/assets/images/page10/img43.png)
+`sodu yum install mysql`
 
+`mysql -u 계정 -p -h Host 주소`
 
 # Reference
 

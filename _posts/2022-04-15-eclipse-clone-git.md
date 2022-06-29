@@ -1,6 +1,6 @@
 ---
-title:  "[java] http 웹서버 만들기 1 - git 연동"
-excerpt: "http 웹서버 만들기 1 - git 연동"
+title:  "[java] 이클립스 git repository clone"
+excerpt: "이클립스 git repository clone"
 
 categories: Java
 tags:
