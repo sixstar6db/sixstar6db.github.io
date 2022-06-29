@@ -183,6 +183,14 @@ author_profile: false
 
 `mysql -u 계정 -p -h Host 주소`
 
+## 과금
+
+ - AWS 사용중 얼마 되지 않아, 과금이 된 것을 확인하였다. 
+
+![image1](/assets/images/page10/img45.png) 
+
+ - 구글링 해보니, EC2 인스턴스를 2개 이상 만들어서 그랬던 것. 인스턴스 별로 기본 스토리지가 할당이 되는데, 사용을 하든 안하든 비용이 청구되는 방식인것으로 보인다.
+
 # Reference
 
 > - 
