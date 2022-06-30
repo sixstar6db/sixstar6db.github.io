@@ -1,19 +1,18 @@
 ---
-title:  "[SPRING] Spring Data Jpa 학습"
-excerpt: "Spring Data Jpa 학습"
+title:  "[java] JPA 학습"
+excerpt: "JPA 학습"
 
 categories: Java
 tags:
-  - [other]
+  - [java]
 
 toc: true
 toc_sticky: true
  
-date: 2022-06-30
-last_modified_at: 2022-06-30
+date: 2022-06-27
+last_modified_at: 2022-06-27
 author_profile: false     
 ---
-
 
 ## 스프링부트 프로젝트 생성
 
