@@ -1,6 +1,6 @@
 ---
-title:  "[java] 스프링부트 웹서비스 AWS 구현"
-excerpt: "스프링부트 웹서비스 AWS 구현"
+title:  "[java] 스프링부트 웹서비스 AWS 구현(1)-개발"
+excerpt: "스프링부트 웹서비스 AWS 구현(1)-개발"
 
 categories: Java
 tags:
@@ -916,118 +916,10 @@ public List<PostListResponseDto> findAllDesc() {
  - 수정 및 삭제에 대한 내용은 스킵!
  - 스크링 시큐리티 부분도 일단 스킵하고, 바로 AWS에 배포하는걸 해보기롤~
 
-## EC2서버에 배포하기
-
-> AWS에서 EC2 와 RDS를 생성한다.(이전 블로그 참고)
-
-> EC2에 프로젝트 Clone 
-
- - `sudo yum install git`
- - `git --version`
-
- - 프로젝트코드 보관할 디렉토리 생성
- - `mkdir app`
- - `mkdir ~/app/step1`
-
- - github에 가서 프로젝트코드 git https 주소를 복사한다.
- - `git clone 복사한주소` 
-
-![image1](/assets/images/page11/img23.png) 
-
- - 테스트를 진행한다. 처음엔 의존성 라이브러리등을 다운로드 하느라 오래 걸린다. 
- - 테스트 실패시, 소스 코드 수정 후 다시 git 에 커밋하고 `git pull`을 수행한다.
-
-![image1](/assets/images/page11/img24.png)
-
-- http 요청에 대한 8080 포트 열기 
-![image1](/assets/images/page11/img25.png)
-
-> 배포 쉘 스크립트 작성하기
-
- - `vim ~/app/step1/deploy.sh`
- 
- ![image1](/assets/images/page11/img26.png)
- ![image1](/assets/images/page11/img27.png)
-
- - `git pull` : 마스터 브랜치의 최신 내용을 받는다. 
- - `JAR_NAME=$(ls -tr $REPOSITORY/ | grep jar | tail -n 1)` : tail -n 으로 가장 나중에 생긴 jar 파일을 찾는다. 
- - `nohup java -jar $REPOSITORY/$JAR_NAME 2>&1 &` 백그라운드로 jar 파일을 실행시킨다. nohup.out 에 로그가 출력된다. 
-
-> RDS 연동하기 
-
- - Posts 테이블 생성한다. 테스트를 돌려본 후 로그에 출력되는 테이블 생성 스크립트를 복사한다. 
-
-```sql 
-create table posts 
-(id bigint not null AUTO_INCREMENT
-, create_date DATETIME
-, modified_date DATETIME
-, author varchar(255)
-, content TEXT not NULL
-, title varchar(500) not NULL
-, primary key (id)) 
-engine=INNODB
-```
-
-- heidisql 에 접속한 후 테이블을 생성한다. 
-- Mariadb JDBC 드라이버를 build.gradle 에 추가한다. 
- `compile("org.mariadb.jdbc:mariadb-java-client")`
--application-real.properties 파일을 생성한다. profile=real 환경에서 적용된다.  
--운영에 적용될 설정 정보를 작성한다. 
-
-```java
-spring.profiles.include=real-db
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
-```
-
--EC2 서버에 DB 설정 파일을 생성한다.
--vim ~/app/application-real-db.properties
-
-```java
-spring.jpa.hibernate.ddl-auto=none
-spring.datasource.url=jdbc:mariadb://rds주소:포트/database명
-spring.datasource.username=db계정
-spring.datasource.password=db계정비번
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-```
-
-- deploy.sh가 real profile 을 사용할 수 있도록 변경한다. 
-
-```java
-nohup java -jar \
- -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-real-db.properties,classpath:/application-real.properties \
-  -Dspring.profiles.active=real \
-   $REPOSITORY/$JAR_NAME 2>&1 &
-```
-
- - -Dspring.profiles.active=real : application-real.properties 를 활성화 시킨다. spring.profiles.include=real-db 옵션때문에 real-db 도 같이 활성화된다. 
-
- - 위에 java 실행 명령어는 -D 파라미터를 사용하였는데, 아래와 같이 사용해도 정상적으로 실행됨.
-
-```java
-// 첫번째 방법
-java -jar springboot-ws-started-1.0-SNAPSHOT.jar --spring.config.location=/home/ec2-user/app/application-real-db.properties --spring.profiles.active=real
-
-// 두번째 방법
-java -jar springboot-ws-started-1.0-SNAPSHOT.jar --spring.config.name=application-real-db --spring.config.location=/home/ec2-user/app/ --spring.profiles.active=real
-```
-
- - 각 옵션의 속성에 대한 값이 여러 개일 경우 ','로 구분한다. 
- ex ) `--spring.config.name=application,jdbc`
-
- - 만약 경로를 잘못 넣어서 maria db 설정 파일을 찾지 못한다면? maria db 대신 h2 가 적용된다. 
- - 위 옵션은 프로그래밍에 적용할수도 있다. (PropertySourcesPlaceholderConfigurer )
-
-
-## CI 배포 자동화 하기
-
-> CI/CD  란 ?
-
- - CI는 코드버전관리 시스템에 PUSH 되면, 자동으로 테스트와 빌드가 수행되어 안정적인 배포 파일을 만드는 과정을 말함.
- - CD는 이 빌드 결과를 운영서버에 무중단 배포까지 진행되는 과정을 말함.
 
 # Reference
 > - 스프링부트와 AWS 혼자 구현하는 웹서비스 ( by 이동욱)
+
 
 - 참고 사이트 
 https://gocheat.github.io/common/clean-arc-package/
