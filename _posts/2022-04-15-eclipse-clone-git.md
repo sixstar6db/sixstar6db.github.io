@@ -54,4 +54,3 @@ author_profile: false
 
 # Reference
 
-> - [백명석의 클린 코더스](https://)

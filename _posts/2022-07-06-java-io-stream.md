@@ -1,0 +1,234 @@
+---
+title:  "[java] 자바 파일 입출력에 대하여"
+excerpt: "자바 파일 입출력에 대하여"
+
+categories: Java
+tags:
+  - [other]
+
+toc: true
+toc_sticky: true
+ 
+date: 2022-07-06
+last_modified_at: 2022-07-06
+author_profile: false     
+---
+
+## 개요
+
+- 자바는 byte 타입과 char 타입의 입출력 방식을 제공한다. 
+- byte 타입은 inputstream 과 outputstream, char 타입으로는 reader 와 writer 가 있다. 하나씩 알아보자
+
+## byte 타입
+
+ - inputstream 과 outputstream 은 byte 단위로 읽어들이고 쓰기를 한다. 
+ - 다음은 파일을 읽고 쓰는 예제이다. 한 바이트씩 읽고, 한바이트씩 쓰기를 한다. 
+ - byte로 읽으면 마지막 부분을 알 수 없기 때문에, int로 변환하여, 읽어드릴 데이터가 없으면 -1이 된다. 
+ - 1byte 씩 읽어, int의 4byte 중에 마지막 byte 에 값을 할당한다. 소스코드상에는 1byte 씩 읽어오는 것이지만, 실제로는 512 바이트(?) 씩 읽어오고, 한 바이트씩 가져온다음에 나머지는 버린다고 한다.  byte[] 로 버퍼를 정의하여 벌크로 가져오는 개선된 방식을 알아보자.
+
+```java
+    try(FileInputStream fis = new FileInputStream("src/com/sk/core/file/FileHandle.java");
+			FileOutputStream fos = new FileOutputStream("output.txt");){
+			int readData = -1; // 1byte 씩 읽어, int 4byte 의 마지막 1byte 에 할당한다. 
+			while((readData = fis.read())!= -1){
+				fos.write(readData);
+			}
+		}
+```
+
+- byte[] 에 선언된 크기만큼 가져온다. 위의 예제와는 달리 반환값은 전체 읽어들여온 바이트수이다. 읽여들어온 바이트수만큼 쓰기를 한다. 
+
+```java
+
+//read를 버퍼만큼 읽어온다. 읽어온 byte 는 buffer 에 담기고, write 를 통해 쓰기된다. 
+
+    try(FileInputStream fis = new FileInputStream("src/com/sk/core/file/FileHandle.java");
+			  FileOutputStream fos = new FileOutputStream("output.txt");){
+			int readCount = 0; // 1byte 씩 읽어, int 4byte 의 마지막 1byte 에 할당한다. 
+			byte[] buffer = new byte[1024];
+			while((readCount = fis.read(buffer))!= -1){
+				fos.write(buffer, 0, readCount);
+			}
+		}
+
+```
+
+- BufferedInputStream 은 내부적으로 버퍼를 갖고 있어, 조금 더 성능 향상을 가져온다고 한다. 
+
+```java
+    try(InputStream fis = new BufferedInputStream(new FileInputStream("D:\\temp\\test\\a.exe"));
+				  OutputStream fos = new BufferedOutputStream(new FileOutputStream("D:\\temp\\test\\b.exe"));){
+				int readCount = 0; // 1byte 씩 읽어, int 4byte 의 마지막 1byte 에 할당한다. 
+				byte[] buffer = new byte[1024];
+				while((readCount = fis.read(buffer))!= -1){
+					fos.write(buffer, 0, readCount);
+				}
+			}
+```
+
+- 다음과 같이 Files 를 이용하여 파일 복사를 할 수 있다. 
+- NIO.2 API(jdk7~) low level 의 시스템 진입점을 사용하기 때문에 파일 복사 기능을 크게 높일 수 있다.
+- 실제 테스트를 해보니 가장 성능이 좋았다. File.copy > Buffered.. > FileInputStream
+
+```java
+    Path path = Paths.get("src/com/sk/core/file/FileHandle.java");
+		Path target = Paths.get("output.txt");
+		//StandardCopyOption.REPLACE_EXISTING : 이미 존재하는 파일일 경우 덮어쓰기
+		Files.copy(path, target, StandardCopyOption.REPLACE_EXISTING);
+```
+
+
+## char 타입
+
+ - Reader 와 Writer 는 char 타입으로 읽기 쓰기를 한다. 
+ - 아래는 한 글자씩 읽어들이고, 한글자씩 쓰기를 한다. 
+
+```java
+    try(FileReader fr = new FileReader("src/com/sk/core/file/FileHandle.java");
+			FileWriter fw = new FileWriter("output.txt");){
+			int readChar = 0;
+			
+			while((readChar = fr.read()) != -1) {
+				System.out.println((char)readChar);
+				fw.write(readChar);
+			}
+		}
+```
+
+ - 보통은 한 줄 씩 읽어들인다. 
+
+```java
+  try(FileReader fr = new FileReader("src/com/sk/core/file/FileHandle.java");
+				BufferedReader br = new BufferedReader(fr);
+			FileWriter fw = new FileWriter("output.txt");
+				BufferedWriter bw = new BufferedWriter(fw)
+				){
+			String readLine = "";
+			
+			while((readLine = br.readLine()) != null) {
+				System.out.println(readLine);
+				bw.write(readLine + "\n");
+			}
+		}
+```
+
+- write 씩 개행문자를 넣어주었는데, PrintWriter 를 써보자.
+
+```java
+    try(FileReader fr = new FileReader("src/com/sk/core/file/FileHandle.java");
+				BufferedReader br = new BufferedReader(fr);
+				PrintWriter pw = new PrintWriter("output.txt");
+				){
+			String readLine = "";
+			
+			while((readLine = br.readLine()) != null) {
+				System.out.println(readLine);
+				pw.println(readLine);
+			}
+		}
+```
+
+## Files
+
+ - Files 를 이용해 line 읽기
+ - 한번에 읽어오는 것과 stream 으로 지연처리(권고) 하는 방식이 있다.
+
+```java
+    Path path = Paths.get("src/com/sk/core/file/FileHandle.java");
+		
+		List<String> readAllLines = Files.readAllLines(path, StandardCharsets.UTF_8);
+		for(String str : readAllLines) System.out.println(str);
+		
+		Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8);
+		lines.forEach(System.out::println);
+```
+
+- InputStream 을 Reader 로 OutputStream 을 Writer 로  생성가능하다.
+
+```java
+    URL url = new URL("https://www.idblife.com/");
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+				OutputStream out = new FileOutputStream("output.txt");
+				Writer writer = new OutputStreamWriter(out);) {
+			Stream<String> lines = reader.lines();
+			lines.forEach(line -> {
+				try {
+					writer.write(line + "\n");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		}
+```
+
+ - Files.newBufferedWriter를 사용할 수 있다. Files.newBufferedWriter 는 BufferedWriter 를 반환하고, PrintWriter 는 Writer를 가지고 생성한다. 
+
+```java
+    URL url = new URL("https://www.idblife.com/");
+		Path path = Paths.get("out.txt");
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+				PrintWriter pw = new PrintWriter(Files.newBufferedWriter(path, StandardOpenOption.CREATE_NEW));
+				) {
+			Stream<String> lines = reader.lines();
+			lines.forEach(line -> {
+				pw.println(line);
+			});
+		}
+```
+
+- String 을 File로 쓰고 싶다면, Files.write를 사용해도 된다. 
+
+```java
+    Path path = Paths.get("out.txt");
+		
+		String str = "tesxt";
+    //StandardOpenOption.APPEND : 쓰기용으로 열었을때 파일의 끝에 추가한다. 
+		Files.write(path, str.getBytes(), StandardOpenOption.APPEND);
+		
+		String str2 = "tesxt2";
+		Files.write(path, str2.getBytes(), StandardOpenOption.APPEND);
+```
+
+- List 를 파일로 쓸수도 있다.
+
+```java
+Files.write(path, Arrays.asList("1", "2", "a"), StandardOpenOption.APPEND);
+```
+
+- Files.readAllBytes 를 이용해, 파일을 byte 로 모두 가져올 수 있다. 
+- DataOutputStream, ObjectOutputStream를 활용하는 방법.
+
+## DataOutputStream, ObjectOutputStream 간단 예제
+
+```java
+    byte[] body = Files.readAllBytes(Paths.get("out.txt"));
+		
+		DataOutputStream dos = new DataOutputStream(new FileOutputStream("result.txt"));
+		dos.writeBytes(new String(body));
+		
+		dos.close();
+		
+		Map<String, String> map = new HashMap<>();
+		map.put("a", "1");
+		map.put("b", "2");
+		
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("map.obj"));
+		oos.writeObject(map);
+		oos.close();
+		
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream("map.obj"));
+		Object readObject = ois.readObject();
+		Map<String, String> readMap = (Map)readObject;
+		System.out.println(readMap.get("a"));
+```
+
+## 파일 잠금
+
+ - FileLock 을 사용하면 되는데, 지금까지 개발하면서 파일잠금 처리하면서 파일쓰기 작업을 했던 적은 없던것 같다. 
+
+
+# Reference
+
+ - 

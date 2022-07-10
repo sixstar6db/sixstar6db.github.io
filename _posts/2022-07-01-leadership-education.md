@@ -143,21 +143,5 @@ Work(작업) Breakdown(분할) Structure(구조)
  - 이번주 토요일 오전 30분만 개인적인 시간을 가지고, 실패 이력을 다시 정리한다. 
  - 실패를 했지만 성장한 부분을 찾아라.
 
- 1 2
- 2 1
- 3 0
- 2 1
- 1 2
- 1 2
- 3 0
- 0 3
- 0 3
- 0 3 
- 2 1
- 3 0
- 2 1
-20 19
 
 # Reference
-
-- https://velog.io/@haerong22/IntelliJ-%EB%A9%80%ED%8B%B0-%EB%AA%A8%EB%93%88-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%A7%8C%EB%93%A4%EA%B8%B0
