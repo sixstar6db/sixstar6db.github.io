@@ -104,7 +104,7 @@ analytics:
 author:
   name             : "이상국"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an **amazing** developer."
+  bio              : "현재, DB FIS에 근무중이며, 홈페이지/모바일등 시스템 개발, 운영을 하고 있는 **amazing** developer 입니다."
   location         : "서울시 강남구 테헤란로"
   email            :
   links:
@@ -132,7 +132,7 @@ footer:
     #   # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/sixstar6db/"
+      url: "https://github.com/190726"
 
 
 
