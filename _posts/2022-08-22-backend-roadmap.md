@@ -4,6 +4,9 @@ excerpt: "백엔드 개발 로드맵"
 
 layout: category
 
+categories: Java
+tags:
+  - [Java]
 
 toc: true
 toc_sticky: false
