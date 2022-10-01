@@ -2,12 +2,11 @@
 title:  "[java] 백엔드 개발 로드맵"
 excerpt: "백엔드 개발 로드맵"
 
-categories: Java
-tags:
-  - [other]
+layout: category
+
 
 toc: true
-toc_sticky: true
+toc_sticky: false
  
 date: 2022-08-22
 last_modified_at: 2022-08-22
