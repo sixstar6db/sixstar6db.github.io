@@ -7,7 +7,7 @@ categories:
 tags:
   - [eclipse]
 
-permalink: /java-core/eclipse_setting/
+permalink: /tools/eclipse_setting/
 
 toc: true
 toc_sticky: true

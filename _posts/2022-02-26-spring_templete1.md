@@ -7,7 +7,7 @@ categories:
 tags:
   - [spring]
 
-permalink: /java-core/spring_templete1/
+permalink: /spring/spring_templete1/
 
 toc: true
 toc_sticky: true
