@@ -5,7 +5,7 @@ excerpt: "스프링부트 프로젝트 템플릿"
 categories:
   - spring
 tags:
-  - [spring-boot]
+  - [spring]
 
 permalink: /java-core/spring_templete1/
 
