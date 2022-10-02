@@ -2,8 +2,8 @@
 main:
   - title: "Home"
     url: /
-  - title: "Java"
-    url: /java/backend-roadmap/
+  - title: "개발"
+    url: /java/my-develop/
   - title: "Tag"
     url: /tags/ 
   - title: "search"
