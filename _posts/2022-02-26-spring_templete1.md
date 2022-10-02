@@ -7,7 +7,7 @@ categories:
 tags:
   - [spring-boot]
 
-permalink: /java-core/spring_project_templete_1/
+permalink: /java-core/spring_templete1/
 
 toc: true
 toc_sticky: true
