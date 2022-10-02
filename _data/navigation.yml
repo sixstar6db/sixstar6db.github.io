@@ -20,9 +20,11 @@ main:
 categories:
   - title: "java-core"
     url: /categories/java-core/
-  - title: "Categories2"
-    url: /categories/categories2/
-  - title: "Categories3"
-    url: /categories/categories3/
-  - title: "Categories4"
-    url: /categories/categories4/
+  - title: "spring"
+    url: /categories/spring/
+  - title: "java-advanced"
+    url: /categories/java-advanced/
+  - title: "service-develop"
+    url: /categories/service-develop/
+  - title: "tools"
+    url: /categories/tools/
