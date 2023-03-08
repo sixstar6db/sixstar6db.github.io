@@ -1,5 +1,19 @@
 ---
-title: 'Maven에서 라이브러리 직접 dependency 추가'
+title: "[java] Maven에서 라이브러리 직접 dependency 추가"
+excerpt: "Maven에서 라이브러리 직접 dependency 추가"
+
+categories:
+  - java-core
+tags:
+  - [java]
+
+permalink: /java-core/maven_local_libarary_dependency/
+
+toc: true
+toc_sticky: true
+
+date: 2023-03-07
+last_modified_at: 2023-03-07
 ---
 
 ## Maven에서 라이브러리 직접 dependency 추가
