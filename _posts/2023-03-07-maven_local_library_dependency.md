@@ -33,6 +33,7 @@ last_modified_at: 2023-03-07
     <systemPath>${basedir}/lib/library-producer-1.0.jar</systemPath>
 </dependency>
 ```
+
  - ${basedir}은 프로젝트 root 경로이다.
  - scope 을 system 으로 해준다. 
 
