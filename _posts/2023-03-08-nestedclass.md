@@ -20,7 +20,7 @@ last_modified_at: 2023-03-09
 
 > inner class 와 static nested class
 
- - 중첩클래스는 크게 비정적 클래스와 정적 클래스라고도 하는데, 비정적 클래스는 inner class 라고 하고, 정적 클래스는 static nested class 라고 부른다.
+ - 중첩클래스는 크게 비정적 클래스와 정적 클래스가 있는데, 비정적 클래스는 inner class 라고 하고, 정적 클래스는 static nested class 라고 부른다.
 
 > 예제 소스
 
