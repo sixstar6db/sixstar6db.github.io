@@ -43,7 +43,7 @@ public static void inputStream() throws IOException {
 
 - 파일인코딩이 UTF-8 이므로 입력값은 UTF-8 인코딩 되어, 3byte 로 inputstream 에 읽혀졌을 것이다.
 
-- 유니코드(UTF-8) 표를 찾아보면 '가'는234, 176, 128 3개의 10진수값(3byte)으로 이루어져 있고, 유니코드로는 AC00 이다. 즉, InputStream의 read 메소드는 1byte 밖에 못 읽기 때문에, 첫번째 1byte 인 234 만 읽은 것이고, 아스키코드표에서 234에 해당하는 문자가 출력된 것이다. 
+- 유니코드(UTF-8) 표를 찾아보면 '가'는234, 176, 128 3개의 10진수값(3byte)으로 이루어져 있고, 유니코드로는 AC00 이다. 즉, InputStream의 read 메소드는 1byte 밖에 못 읽기 때문에, 첫번째 1byte 인 234 만 읽은 것이고,  234에 해당하는 unicode 문자가 출력된 것이다. 
 - 234 는 16진수로 00EA이고, java 내부적으로 UTF-16으로 인코딩되므로, 유니코드(UTF-16 Encoding)에 라틴소문자 'ê'에 매핑되게 된다. 그래서 'ê' 출력이 된 것이다.
 
 
