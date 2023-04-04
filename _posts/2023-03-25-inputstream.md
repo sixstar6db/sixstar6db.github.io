@@ -105,3 +105,48 @@ public static void bufferedReader() throws IOException {
 ```
 
  - InputStream 을 통해 byte 단위로 데이터를 받고, 그 데이터를 문자 형태로 변환하기 위해 InputStreamReader 로 감싼다. 거기에 Buffer 를 사용하여 문자열을 처리할 수 있도록 BufferedReader 로 감싼다. 기본버퍼크기는 8192개의 문자를 저장할 수 있다. 버퍼가 다 차거나 일정 조건이 되면 프로그램으로 데이터를 보내버려 버퍼를 비워버린다. 
+
+### DataInputStream , DataOutputStream
+
+ - DataInputStream/DataOutputStream 은 byte 단위 데이터를 데이터타입으로 받기 위해 Wrapping 한 클래스이다. 예를 들어, DataOutputStream 의 writeInt 메서드는,
+ 정수값을 4byte로 만들어 보낸다. wirteLong 메서드는 8byte로 보낸다. 받는 측은, 8byte를 받아, Long 타입 값으로 뽑아내면 된다. DataInputStream 의 readLong 메서드를 통해
+ 8byte 를 읽어 Long 타입 데이터로 변환할 수 있다. writeUTF 메서드는 처음 4byte는 문자열의 길이를 보내고, 이후 실제 문자열 값의 UTF8인코딩된 값을 보내게 된다. 
+ 받는 측에서는 readUTF를 통해 변환된 데이터로 받을 수 있다.
+
+```java
+
+ServerSocket serverSocket = new ServerSocket(8000);
+Socket socket = serverSocket.accept();
+InputStream in = socket.getInputStream();
+int read;
+while((read = in.read())!=-1) {
+	System.out.println(read);
+}
+
+``` 
+
+ - 예를 들어, 위와 같은 서버 소켓 프로그램이 있고, 아래와 같이 클라이언테에서 데이터를 보낸다면
+
+```java
+Socket socket = new Socket("localhost", 8000);
+DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+outputStream.writeUTF("이상국");
+```
+
+-->
+
+0
+9
+236
+157
+180
+236
+131
+129
+234
+181
+173
+
+ - 처음 2byte는 문자열 byte 길이(UTF-8에서 한글 1글자는 3byte)이고, 236, 157, 180 은 한글 '이'를 유니코드 3byte 십진수 값으로 나타낸 것이다.
+
+ - 236, 157, 180 은 UTF16에서는 16진수 C774에 매핑된다. 4bit 가 16진수 한글자를 표현하므로, 4글자면 2바이트가 됨. 즉 한글이 UTF8에서는 3byte, UTF16에서는 2byte로 나타낸다.
