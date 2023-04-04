@@ -104,7 +104,17 @@ public static void bufferedReader() throws IOException {
 }
 ```
 
- - InputStream 을 통해 byte 단위로 데이터를 받고, 그 데이터를 문자 형태로 변환하기 위해 InputStreamReader 로 감싼다. 거기에 Buffer 를 사용하여 문자열을 처리할 수 있도록 BufferedReader 로 감싼다. 기본버퍼크기는 8192개의 문자를 저장할 수 있다. 버퍼가 다 차거나 일정 조건이 되면 프로그램으로 데이터를 보내버려 버퍼를 비워버린다. 
+ - InputStream 을 통해 byte 단위로 데이터를 받고, 그 데이터를 문자 형태로 변환하기 위해 InputStreamReader 로 감싼다. 거기에 Buffer 를 사용하여 문자열을 처리할 수 있도록 BufferedReader 로 감싼다. 기본버퍼크기는 8192개의 문자를 저장할 수 있다. 버퍼가 다 차거나 일정 조건이 되면 프로그램으로 데이터를 보내버려 버퍼를 비워버린다.
+ - readLine() 메서드는 개행문자(\r\n)가 있는 곳까지 읽어 반환한다. java8 이상에서는 아래와 같이 lines() 메소드를 통해 스트림으로 반환할 수도 있다.
+
+```java
+//from socket inputtream
+BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+reader.lines().forEach(System.out::println);
+//from file
+BufferedReader reader = new BufferedReader(new FileReader(new File("pom.xml")));
+reader.lines().forEach(System.out::println);
+``` 
 
 ### DataInputStream , DataOutputStream
 
