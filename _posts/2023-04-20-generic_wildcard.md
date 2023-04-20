@@ -21,8 +21,8 @@ last_modified_at: 2023-04-20
  - 제너릭 wildcard에 대해서 알아보고자 한다. generic 에 보면, <? super T> : lower bound 또는 <? extends T> : upper bound 형태의 제너릭 wildcard 를 사용하는 것을 자주 볼 수 있다.
  항상 super 와 extends 적용되는 부분에 혼란이 있어, 정리를 해볼까 한다. 
 
- - <? extends T> : upper bound(상위한정) 은 타입을 T로 한정한다. 
- - <? extends T> : upper bound(하위한정) 은 가장 하위 타입을 T로 한정한다. 
+ - `<? extends T>` : upper bound(상위한정) 은 타입을 T로 한정한다. 
+ - `<? super T>` : lower bound(하위한정) 은 하위 타입을 T로 한정한다. 
 
  - 아래 소스에 보면, 두 메서드에 arguments 에 인자값을 넣을때, 상위타입에 하위타입의 인자는 들어가지만, 하위타입에 상위타입의 인자는 컴파일 에러가 난다. 당연한 얘기인데, 이 원리를 가지고 와일드카드의 super 와 extends 를 살펴보고자 한다. 
  - 
