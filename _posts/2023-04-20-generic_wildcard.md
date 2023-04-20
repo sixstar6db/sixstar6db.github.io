@@ -81,4 +81,4 @@ public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
 ```
 
 - 결론적으로, 제너릭으로 선언된 객체의 파라미터타입으로 선언된 값을 꺼내어 처리하는 건, extends 로하고, 
-- 제너릭으로 선언된 객체의 메서드를 통해 외부의 값을 인자로 전달할때는 super 로 선안하면 된다.
+- 제너릭으로 선언된 객체의 메서드를 통해 외부의 값을 인자로 전달할때는 super 로 선언하면 된다.
