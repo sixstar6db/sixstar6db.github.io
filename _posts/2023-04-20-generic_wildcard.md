@@ -18,7 +18,7 @@ last_modified_at: 2023-04-20
 
 ## 개요 
 
- - 제너릭 wildcard에 대해서 알아보고자 한다. generic 에 보면, <? super T> : lower bound 또는 <? extends T> : upper bound 형태의 제너릭 wildcard 를 사용하는 것을 자주 볼 수 있다.
+ - [수정] 제너릭 wildcard에 대해서 알아보고자 한다. generic 에 보면, <? super T> : lower bound 또는 <? extends T> : upper bound 형태의 제너릭 wildcard 를 사용하는 것을 자주 볼 수 있다.
  항상 super 와 extends 적용되는 부분에 혼란이 있어, 정리를 해볼까 한다. 
 
  - `<? extends T>` : upper bound(상위한정) 은 타입을 T로 한정한다. 
